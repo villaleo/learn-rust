@@ -34,9 +34,8 @@ fn main() {
 
     println!("Here is the graph you entered: {:?}", graph);
     println!("Enter the node index (root) to begin the BFS algorithm: ");
-    let root = read_value::<usize>().unwrap();
-
     println!("BFS result: ");
+    let root = read_value::<usize>().unwrap();
     println!("{:?}", breadth_first_search(&graph, root));
 }
 
