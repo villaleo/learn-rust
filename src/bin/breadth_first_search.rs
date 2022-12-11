@@ -21,7 +21,6 @@ fn main() {
     let num_edges = read_value::<usize>().unwrap();
 
     let mut graph = vec![Vec::<i32>::new(); num_nodes];
-
     for _ in 0..num_edges {
         println!("Enter an edge <to: i32, from: i32>");
         let edge = read_value::<String>().unwrap().as_str().split(',')
