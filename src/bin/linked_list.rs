@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter};
+
 #[derive(Clone)]
 enum Link<T> {
     None,
@@ -7,6 +9,17 @@ enum Link<T> {
 #[derive(Clone)]
 struct Cursor<T> {
     curr: Link<T>,
+}
+
+impl<T> Display for Link<T> where T: Copy + Display {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[").unwrap();
+        for i in self.clone() {
+            write!(f, "{} -> ", i).unwrap();
+        }
+
+        write!(f, "]")
+    }
 }
 
 impl<T> IntoIterator for Link<T> where T: Copy {
@@ -85,8 +98,10 @@ fn main() {
     list.push(10);
     list.push(20);
     list.push(30);
+    list.push(40);
+    list.push(50);
 
-    println!("{}", list.pop().unwrap());
-    println!("{}", list.pop().unwrap());
-    println!("{}", list.pop().unwrap());
+    println!("{}", list);
+    let value = list.pop().unwrap();
+    println!("After popping off {}:\n{}", value, list);
 }
