@@ -1,7 +1,45 @@
+#[derive(Clone)]
 enum Link<T> {
     None,
     Tail { item: T },
-    Link { item: T, next: Box<Link<T>>},
+    Link { item: T, next: Box<Link<T>> },
+}
+
+#[derive(Clone)]
+struct Cursor<T> {
+    curr: Link<T>,
+}
+
+impl<T> IntoIterator for Link<T> where T: Copy {
+    type Item = T;
+    type IntoIter = Cursor<T>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        Cursor {
+            curr: self
+        }
+    }
+}
+
+impl<T> Iterator for Cursor<T> where T: Copy {
+    type Item = T;
+
+    fn next(&mut self) -> Option<T> {
+        let next = match self.curr {
+            Link::None => None,
+            Link::Tail { item } => {
+                self.curr = Link::None;
+                return Some(item);
+            }
+            Link::Link { item, ref mut next } => {
+                let mut n = Box::new(Link::None);
+                std::mem::swap(next, &mut n);
+                self.curr = *n;
+                return Some(item);
+            }
+        };
+        return next;
+    }
 }
 
 impl<T> Link<T> where T: Copy {
@@ -24,7 +62,7 @@ impl<T> Link<T> where T: Copy {
                 let item = *item;
                 self.as_none();
                 return Some(item);
-            },
+            }
             Self::Link { item, next } => {
                 let mut temp = Box::new(Self::None);
                 let item = *item;
@@ -32,7 +70,7 @@ impl<T> Link<T> where T: Copy {
                 std::mem::swap(next, &mut temp);
                 self.as_next(*temp);
                 return Some(item);
-            },
+            }
         }
     }
 
@@ -48,7 +86,7 @@ impl<T> Link<T> where T: Copy {
         *self = match self {
             Self::Tail { item } => Self::Link {
                 item: *item,
-                next: Box::new(Self::Tail { item: it })
+                next: Box::new(Self::Tail { item: it }),
             },
             _ => panic!("Illegal state: Cannot convert to Link")
         }
