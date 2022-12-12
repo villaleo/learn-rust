@@ -75,10 +75,6 @@ impl<T> Link<T> where T: Copy {
         }
     }
 
-    fn as_none(&mut self) {
-        *self = std::mem::replace(self, Link::None);
-    }
-
     fn as_next(&mut self, next: Link<T>) {
         *self = next;
     }
