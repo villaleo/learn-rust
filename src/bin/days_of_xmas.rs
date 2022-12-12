@@ -20,14 +20,25 @@ fn lyric_for_day(day: u8) {
 }
 
 fn chorus_on_day(day: u8) {
-    let days_spelled_out = HashMap::<u8, &str>::from(
-        [
-            (1, "first"), (2, "second"), (3, "third"), (4, "fourth"), (5, "fifth"), (6, "sixth"),
-            (7, "seventh"), (8, "eighth"), (9, "ninth"), (10, "tenth"), (11, "eleventh"), (12, "twelfth")
-        ],
-    );
+    let days_spelled_out = HashMap::<u8, &str>::from([
+        (1, "first"),
+        (2, "second"),
+        (3, "third"),
+        (4, "fourth"),
+        (5, "fifth"),
+        (6, "sixth"),
+        (7, "seventh"),
+        (8, "eighth"),
+        (9, "ninth"),
+        (10, "tenth"),
+        (11, "eleventh"),
+        (12, "twelfth"),
+    ]);
 
-    println!("On the {} day of Christmas my true love sent to me", days_spelled_out.get(&day).unwrap());
+    println!(
+        "On the {} day of Christmas my true love sent to me",
+        days_spelled_out.get(&day).unwrap()
+    );
 }
 
 fn main() {

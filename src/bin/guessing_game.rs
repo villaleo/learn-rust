@@ -1,6 +1,6 @@
+use rand::Rng;
 use std::cmp::Ordering;
 use std::io::stdin;
-use rand::Rng;
 
 fn is_guess_correct(n: u32, secret: &u32) -> bool {
     match n.cmp(secret) {
@@ -25,7 +25,11 @@ fn main() {
         let mut guess = String::new();
         stdin().read_line(&mut guess).expect("Failed to read line");
         match guess.trim().parse::<u32>() {
-            Ok(n) => if is_guess_correct(n, &secret) { break; },
+            Ok(n) => {
+                if is_guess_correct(n, &secret) {
+                    break;
+                }
+            }
             Err(_) => continue,
         }
     }

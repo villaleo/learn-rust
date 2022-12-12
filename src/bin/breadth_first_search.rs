@@ -1,5 +1,5 @@
-use std::io::stdin;
 use std::collections::vec_deque::VecDeque;
+use std::io::stdin;
 use std::str::FromStr;
 
 /// Reads a line from [stdin] and attempts to parses it as [T], where T
@@ -23,9 +23,18 @@ fn main() {
     let mut graph = vec![Vec::<i32>::new(); num_nodes];
     for _ in 0..num_edges {
         println!("Enter an edge <to: i32, from: i32>");
-        let edge = read_value::<String>().unwrap().as_str().split(',')
-            .collect::<Vec<&str>>().iter()
-            .map(|&x| x.to_string().replace(" ","").parse::<i32>().expect("Cannot parse as i32"))
+        let edge = read_value::<String>()
+            .unwrap()
+            .as_str()
+            .split(',')
+            .collect::<Vec<&str>>()
+            .iter()
+            .map(|&x| {
+                x.to_string()
+                    .replace(" ", "")
+                    .parse::<i32>()
+                    .expect("Cannot parse as i32")
+            })
             .collect::<Vec<i32>>();
 
         graph[edge[0] as usize].push(edge[1]);

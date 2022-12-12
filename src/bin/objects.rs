@@ -7,12 +7,13 @@ struct Person {
 }
 
 fn main() {
-    let mut people: Vec<Person> = Vec::from([
-        Person::new("Leonardo".to_string(), vec![
+    let mut people: Vec<Person> = Vec::from([Person::new(
+        "Leonardo".to_string(),
+        vec![
             Box::new(Person::new("Ruben".to_string(), vec![])),
             Box::new(Person::new("Santiago".to_string(), vec![])),
-        ]),
-    ]);
+        ],
+    )]);
 
     println!("Current list of people:");
     for person in &people {
@@ -42,9 +43,7 @@ impl Person {
 
         let mut siblings: Vec<Box<Person>> = vec![];
         for entry in tokens {
-            siblings.push(Box::new(Person::new(
-                entry.trim().to_string(), vec![]))
-            );
+            siblings.push(Box::new(Person::new(entry.trim().to_string(), vec![])));
         }
 
         Self { name, siblings }
@@ -53,7 +52,9 @@ impl Person {
 
 impl Display for Person {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-        let names = &self.siblings.iter()
+        let names = &self
+            .siblings
+            .iter()
             .map(|person: &Box<Person>| person.name.clone())
             .collect::<Vec<String>>();
         write!(f, "{} with siblings {:?}", self.name, names)
