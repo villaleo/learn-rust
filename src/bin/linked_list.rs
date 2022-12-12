@@ -50,7 +50,7 @@ impl<T> Iterator for Cursor<T> where T: Copy {
     }
 }
 
-impl<T> Link<T> where T: Copy {
+impl<T> Link<T> where T: Copy + PartialEq {
     pub fn new() -> Self {
         Self::None
     }
@@ -76,6 +76,15 @@ impl<T> Link<T> where T: Copy {
         }
     }
 
+    pub fn contains(&self, item: T) -> bool {
+        for node in self.clone() {
+            if node == item {
+                return true;
+            }
+        }
+        return false;
+    }
+
     fn as_link(&mut self, it: T) {
         *self = match self {
             Self::None => {
@@ -83,7 +92,7 @@ impl<T> Link<T> where T: Copy {
                     item: it,
                     next: Box::new(Self::None),
                 }
-            },
+            }
             _ => panic!("Illegal state: Cannot convert to Link")
         }
     }
@@ -101,7 +110,8 @@ fn main() {
     list.push(40);
     list.push(50);
 
-    println!("{}", list);
-    let value = list.pop().unwrap();
-    println!("After popping off {}:\n{}", value, list);
+    println!("List: {}", list);
+    println!("After popping off {}:\n{}", list.pop().unwrap(), list);
+    println!("List contains 40: {}", list.contains(40));
+    println!("List contains 10: {}", list.contains(10));
 }
