@@ -1,4 +1,5 @@
 use std::fmt::{Display, Formatter};
+use std::mem;
 
 /// A linked list [Link].
 ///
@@ -48,7 +49,7 @@ impl<T> Iterator for LinkIterator<T> where T: Copy {
             Link::None => None,
             Link::Link { item, ref mut next } => {
                 let mut n = Box::new(Link::None);
-                std::mem::swap(next, &mut n);
+                mem::swap(next, &mut n);
                 self.curr = *n;
                 Some(item)
             }
@@ -73,6 +74,17 @@ impl<T> Link<T> where T: Copy + PartialEq {
         }
     }
 
+    /// Pushes an item to the front of the list.
+    ///
+    /// `self` is a reference to the first item in the list, so the operation is O(1) time.
+    pub fn push_front(&mut self, item: T) {
+        let new_head = Self::Link {
+            item,
+            next: Box::new(mem::replace(self, Self::None))
+        };
+        *self = new_head;
+    }
+
     /// Pops the first item from the list and returns it, wrapped in an [Option]. If the list is empty, [None] is returned.
     ///
     /// `self` is a reference to the first item in the list so, the operation is O(1) time.
@@ -83,7 +95,7 @@ impl<T> Link<T> where T: Copy + PartialEq {
                 let mut temp = Box::new(Self::None);
                 let item = *item;
 
-                std::mem::swap(next, &mut temp);
+                mem::swap(next, &mut temp);
                 self.as_next(*temp);
                 Some(item)
             }
@@ -123,14 +135,9 @@ impl<T> Link<T> where T: Copy + PartialEq {
 
 fn main() {
     let mut list = Link::<i32>::new();
-    list.push_back(10);
-    list.push_back(20);
-    list.push_back(30);
-    list.push_back(40);
-    list.push_back(50);
+    list.push_front(10);
+    list.push_front(20);
+    list.push_front(30);
 
     println!("List: {}", list);
-    println!("After popping off {}:\n{}", list.pop_front().unwrap(), list);
-    println!("List contains 40: {}", list.contains(40));
-    println!("List contains 10: {}", list.contains(10));
 }
